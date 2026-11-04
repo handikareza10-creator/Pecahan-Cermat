@@ -1,0 +1,783 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PECAHAN CERMAT v1.0 | Matematika Kelas VII</title>
+<style>
+:root {
+  --navy: #172554;
+  --blue: #2563eb;
+  --sky: #eff6ff;
+  --ink: #172033;
+  --muted: #64748b;
+  --line: #dbe4f0;
+  --paper: #ffffff;
+  --green: #15803d;
+  --amber: #b45309;
+  --red: #dc2626;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #f4f7fb; color: var(--ink); font: 15px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+header { background: linear-gradient(120deg, #172554, #1d4ed8); color: white; padding: 24px max(20px, calc((100% - 1120px)/2)); }
+header .tag { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; opacity: .8; font-weight: 700; }
+header h1 { font-size: clamp(24px, 4vw, 36px); margin: 6px 0 4px; }
+header p { margin: 0; max-width: 700px; color: #dbeafe; font-size: 14px; }
+
+.wrap { max-width: 1120px; margin: 20px auto; padding: 0 16px; }
+.top-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+.pill { background: white; border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; color: #334155; font-size: 13px; font-weight: 600; }
+
+.layout { display: grid; grid-template-columns: 240px 1fr; gap: 18px; }
+nav, .panel, .card { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 4px 12px #0f172a05; }
+nav { padding: 12px; height: max-content; position: sticky; top: 12px; }
+nav button { display: block; width: 100%; text-align: left; border: 0; background: transparent; padding: 10px 12px; border-radius: 8px; color: #334155; font-weight: 600; cursor: pointer; margin: 2px 0; font-size: 14px; }
+nav button.active, nav button:hover { background: var(--sky); color: var(--blue); }
+
+main { min-width: 0; }
+.panel { padding: 24px; min-height: 480px; }
+.eyebrow { color: var(--blue); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; }
+h2 { font-size: 22px; line-height: 1.3; margin: 4px 0 12px; color: var(--navy); }
+h3 { margin: 0 0 8px; color: var(--navy); font-size: 16px; }
+.lead { color: var(--muted); margin-top: 0; font-size: 14px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 16px 0; }
+.card { padding: 16px; box-shadow: none; }
+.callout { background: #eff6ff; border-left: 4px solid var(--blue); padding: 12px 14px; border-radius: 8px; margin: 12px 0; font-size: 14px; line-height: 1.8; }
+.callout-sub { background: #f8fafc; border-left: 3px solid #94a3b8; padding: 8px 12px; border-radius: 6px; margin: 6px 0; font-size: 13px; line-height: 1.7; }
+
+.fraction { font-size: 18px; font-weight: 700; color: var(--navy); display: inline-flex; flex-direction: column; align-items: center; line-height: 1; vertical-align: middle; margin: 0 3px; }
+.fraction span:first-child { border-bottom: 2px solid currentColor; padding: 0 4px 2px; }
+.fraction span:last-child { padding: 2px 4px 0; }
+.mixed-fraction { display: inline-flex; align-items: center; font-size: 18px; font-weight: 700; color: var(--navy); vertical-align: middle; margin: 0 3px; }
+.mixed-fraction .whole { font-size: 18px; margin-right: 2px; }
+
+button.primary { background: var(--blue); color: white; border: 0; border-radius: 8px; padding: 10px 16px; font-weight: 700; cursor: pointer; }
+button.primary:hover { background: #1d4ed8; }
+button.secondary { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; border-radius: 8px; padding: 8px 14px; font-weight: 700; cursor: pointer; }
+
+input, textarea, select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font: inherit; background: white; }
+label { display: block; font-weight: 600; margin: 10px 0 4px; font-size: 14px; }
+.muted { color: var(--muted); font-size: 13px; }
+
+.option { display: flex; align-items: center; width: 100%; text-align: left; margin: 6px 0; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: white; cursor: pointer; font-size: 14px; min-height: 48px; }
+.option:hover { border-color: #60a5fa; background: #f8fbff; }
+.option.selected { border-color: var(--blue); background: var(--sky); font-weight: 600; }
+
+.feedback { padding: 12px; border-radius: 8px; margin-top: 14px; }
+.good { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+.bad { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+
+.timer-box { font-size: 16px; font-weight: 700; color: var(--red); background: #fef2f2; border: 1px solid #fecaca; padding: 8px 14px; border-radius: 8px; display: inline-block; margin-bottom: 12px; }
+.chatbox { background: #f8fafc; border: 1px solid var(--line); border-radius: 10px; padding: 14px; min-height: 100px; margin: 12px 0; font-size: 14px; line-height: 1.8; }
+
+.game-canvas { border: 1px solid var(--line); border-radius: 8px; background: #fff; display: block; margin: 10px auto; }
+.solution-box { margin-top: 10px; padding: 10px; background: #f8fafc; border-left: 3px solid var(--blue); font-size: 13px; border-radius: 4px; line-height: 1.8; }
+
+footer { color: var(--muted); font-size: 13px; text-align: center; padding: 24px 10px; border-top: 1px solid var(--line); margin-top: 30px; background: white; }
+
+@media(max-width:760px){
+  .layout { grid-template-columns: 1fr; }
+  nav { position: static; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+  nav button { font-size: 12px; padding: 8px; }
+  .grid2 { grid-template-columns: 1fr; }
+  .panel { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="tag">Media Pembelajaran Digital • Matematika SMP</div>
+  <h1>PECAHAN CERMAT v1.0</h1>
+  <p>Media Interaktif Pembelajaran Bilangan Pecahan Kelas VII SMP</p>
+</header>
+
+<div class="wrap">
+  <div class="top-bar">
+    <span class="pill">Kelas VII SMP</span>
+    <span class="pill">Materi: Bilangan Pecahan Positif & Negatif</span>
+    <span class="pill">Versi 1.0</span>
+  </div>
+
+  <div class="layout">
+    <nav aria-label="Navigasi Utama">
+      <button class="active" data-page="home">🏠 Beranda</button>
+      <button data-page="lessons">📘 Pembelajaran Pecahan</button>
+      <button data-page="quiz">📝 Kuis Interaktif</button>
+      <button data-page="games">🎮 Games Pecahan</button>
+      <button data-page="tutor">🤖 Asisten Belajar</button>
+    </nav>
+
+    <main>
+      <section class="panel" id="content"></section>
+    </main>
+  </div>
+</div>
+
+<footer>
+  PECAHAN CERMAT v1.0 &bull; Media Pembelajaran Matematika SMP<br>
+  <strong>Pengembang: Reza Handika Winata Lubis</strong>
+</footer>
+
+<script>
+const content = document.getElementById('content');
+
+// Helper function untuk render pecahan vertikal (termasuk pecahan negatif)
+function f(n, d) {
+  let isNeg = false;
+  if (typeof n === 'number' && typeof d === 'number') {
+    if ((n < 0 && d > 0) || (n > 0 && d < 0)) isNeg = true;
+    n = Math.abs(n);
+    d = Math.abs(d);
+  } else if (String(n).startsWith('-')) {
+    isNeg = true;
+    n = String(n).substring(1);
+  }
+  return `${isNeg ? '<span style="font-size:18px; font-weight:700; color:var(--navy); margin-right:2px;">-</span>' : ''}<span class="fraction"><span>${n}</span><span>${d}</span></span>`;
+}
+
+function mf(w, n, d) {
+  let isNeg = false;
+  if (w < 0) { isNeg = true; w = Math.abs(w); }
+  return `${isNeg ? '<span style="font-size:18px; font-weight:700; color:var(--navy); margin-right:2px;">-</span>' : ''}<span class="mixed-fraction"><span class="whole">${w}</span><span class="fraction"><span>${n}</span><span>${d}</span></span></span>`;
+}
+
+// FPB Helper
+function gcd(a, b) {
+  a = Math.abs(a); b = Math.abs(b);
+  while (b) { let t = b; b = a % b; a = t; }
+  return a;
+}
+
+const homeHTML = `
+  <div class="eyebrow">Selamat Datang</div>
+  <h2>Media Pembelajaran Interaktif Pecahan Cermat</h2>
+  <p class="lead">Silakan pelajari tujuan pembelajaran dan petunjuk penggunaan aplikasi di bawah ini sebelum memulai.</p>
+  
+  <div class="grid2">
+    <div class="card">
+      <h3>🎯 Tujuan Pembelajaran</h3>
+      <ol style="padding-left:18px; margin:0; line-height:1.6; font-size:14px;">
+        <li>Memahami pengertian bilangan pecahan positif dan negatif, membandingkan, serta mengurutkannya.</li>
+        <li>Menyelesaikan operasi penjumlahan dan pengurangan bilangan pecahan (sama penyebut & beda penyebut).</li>
+        <li>Menyelesaikan operasi perkalian dan pembagian bilangan pecahan positif dan negatif.</li>
+        <li>Mengubah pecahan biasa/campuran menjadi pecahan desimal dan persen serta sebaliknya.</li>
+        <li>Menyelesaikan operasi hitung campuran pecahan dalam kehidupan sehari-hari.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>🧭 Cara Menggunakan</h3>
+      <ol style="padding-left:18px; margin:0; line-height:1.6; font-size:14px;">
+        <li><strong>Menu Pembelajaran Pecahan:</strong> Pelajari 12 modul utama yang disajikan lengkap dengan 3 contoh visual (dua positif, salah satu negatif, keduanya negatif).</li>
+        <li><strong>Menu Kuis Interaktif:</strong> Uji kemampuan Anda dengan 15 soal pilihan ganda dalam durasi 12 menit. Pembahasan lengkap akan muncul setelah kuis disubmit.</li>
+        <li><strong>Menu Games Pecahan:</strong> Latihan kecepatan & ketepatan menjawab 10 soal tantangan sulit dalam waktu 5 menit.</li>
+        <li><strong>Menu Asisten Belajar:</strong> Dapatkan penyelesaian otomatis langkah demi langkah untuk pecahan positif dan negatif.</li>
+      </ol>
+    </div>
+  </div>
+  <button class="primary" onclick="go('lessons')">Mulai Belajar Materi →</button>
+`;
+
+const lessonsData = [
+  { 
+    id:1, 
+    title:"1. Pengertian dan Mengenal Bilangan Pecahan", 
+    body:`<p>Pecahan menyatakan bagian dari keseluruhan. Pecahan ditulis dalam bentuk ${f('a','b')} dengan <b>a</b> sebagai pembilang dan <b>b</b> sebagai penyebut (b ≠ 0). Pecahan juga dapat bernilai negatif.</p>
+    <div class="callout">
+      <b>Contoh Soal:</b>
+      <div class="callout-sub"><b>1) Dua Bilangan Positif:</b> Pecahan ${f(3,4)} menyatakan 3 bagian dari total 4 bagian yang sama rata.</div>
+      <div class="callout-sub"><b>2) Salah Satu Negatif:</b> Pecahan ${f(-2,5)} berarti penurunan atau kekurangan sebesar 2 dari 5 bagian keseluruhan.</div>
+      <div class="callout-sub"><b>3) Pembilang & Penyebut Negatif:</b> Pecahan ${f('-3','-7')} nilainya sama dengan pecahan positif ${f(3,7)} karena (- ÷ - = +).</div>
+    </div>` 
+  },
+  { 
+    id:2, 
+    title:"2. Membandingkan Dua atau Lebih Bilangan Pecahan", 
+    body:`<p>Untuk membandingkan pecahan, samakan penyebutnya (KPK) atau gunakan perkalian silang. Ingat pada garis bilangan, bilangan yang terletak di sebelah kanan selalu lebih besar.</p>
+    <div class="callout">
+      <b>Contoh Soal:</b>
+      <div class="callout-sub"><b>1) Dua Bilangan Positif:</b> Bandingkan ${f(2,3)} dan ${f(3,4)}.<br>Perkalian silang: 2×4 = 8, dan 3×3 = 9. Karena 8 < 9, maka <b>${f(2,3)} < ${f(3,4)}</b>.</div>
+      <div class="callout-sub"><b>2) Salah Satu Negatif:</b> Bandingkan ${f(-3,4)} dan ${f(1,2)}.<br>Bilangan negatif selalu lebih kecil dari bilangan positif, maka <b>${f(-3,4)} < ${f(1,2)}</b>.</div>
+      <div class="callout-sub"><b>3) Keduanya Negatif:</b> Bandingkan ${f(-1,3)} dan ${f(-2,3)}.<br>Pada nilai negatif, angka yang mendekati nol lebih besar. Karena -1 > -2, maka <b>${f(-1,3)} > ${f(-2,3)}</b>.</div>
+    </div>` 
+  },
+  { 
+    id:3, 
+    title:"3. Mengurutkan Dua atau Lebih Bilangan Pecahan", 
+    body:`<p>Samakan penyebut semua pecahan dengan KPK, lalu bandingkan pembilangnya dari yang terkecil atau terbesar.</p>
+    <div class="callout">
+      <b>Contoh Soal:</b>
+      <div class="callout-sub"><b>1) Dua Bilangan Positif:</b> Urutkan ${f(1,2)}, ${f(2,3)}, ${f(1,4)} naik.<br>Penyebut disamakan ke 12: ${f(6,12)}, ${f(8,12)}, ${f(3,12)}. Urutan: <b>${f(1,4)}, ${f(1,2)}, ${f(2,3)}</b>.</div>
+      <div class="callout-sub"><b>2) Salah Satu Negatif:</b> Urutkan ${f(-1,2)}, ${f(3,4)}, ${f(1,4)} naik.<br>Disamakan ke penyebut 4: ${f(-2,4)}, ${f(3,4)}, ${f(1,4)}. Urutan: <b>${f(-1,2)}, ${f(1,4)}, ${f(3,4)}</b>.</div>
+      <div class="callout-sub"><b>3) Keduanya Negatif:</b> Urutkan ${f(-3,4)}, ${f(-1,2)}, ${f(1,4)} naik.<br>Konversi: ${f(-3,4)}, ${f(-2,4)}, ${f(1,4)}. Urutan: <b>${f(-3,4)}, ${f(-1,2)}, ${f(1,4)}</b>.</div>
+    </div>` 
+  },
+  { 
+    id:4, 
+    title:"4. Operasi Hitung Penjumlahan Bilangan Pecahan", 
+    body:`
+    <div style="margin-bottom:12px;">
+      <h4 style="margin:6px 0; color:var(--blue);">a) Sama Penyebut</h4>
+      <p>Jumlahkan pembilangnya secara langsung dan penyebutnya tetap.</p>
+      <div class="callout">
+        <b>Contoh Soal:</b>
+        <div class="callout-sub"><b>1) Positif + Positif:</b> ${f(2,7)} + ${f(3,7)} = ${f('2+3',7)} = <b>${f(5,7)}</b></div>
+        <div class="callout-sub"><b>2) Salah Satu Negatif:</b> ${f(-5,9)} + ${f(2,9)} = ${f('-5+2',9)} = <b>${f(-3,9)} = ${f(-1,3)}</b></div>
+        <div class="callout-sub"><b>3) Negatif + Negatif:</b> ${f(-1,5)} + (${f(-3,5)}) = ${f('-1-3',5)} = <b>${f(-4,5)}</b></div>
+      </div>
+    </div>
+    <div>
+      <h4 style="margin:6px 0; color:var(--blue);">b) Beda Penyebut</h4>
+      <p>Samakan penyebutnya menggunakan KPK sebelum menjumlahkan pembilang.</p>
+      <div class="callout">
+        <b>Contoh Soal:</b>
+        <div class="callout-sub"><b>1) Positif + Positif:</b> ${f(1,3)} + ${f(1,2)} = ${f(2,6)} + ${f(3,6)} = <b>${f(5,6)}</b></div>
+        <div class="callout-sub"><b>2) Salah Satu Negatif:</b> ${f(-1,3)} + ${f(1,2)} = ${f(-2,6)} + ${f(3,6)} = <b>${f(1,6)}</b></div>
+        <div class="callout-sub"><b>3) Negatif + Negatif:</b> ${f(-1,4)} + (${f(-2,3)}) = ${f(-3,12)} + (${f(-8,12)}) = <b>${f(-11,12)}</b></div>
+      </div>
+    </div>
+  ` },
+  { 
+    id:5, 
+    title:"5. Operasi Hitung Pengurangan Bilangan Pecahan", 
+    body:`
+    <div style="margin-bottom:12px;">
+      <h4 style="margin:6px 0; color:var(--blue);">a) Sama Penyebut</h4>
+      <p>Kurangkan pembilang secara langsung dan penyebutnya tetap.</p>
+      <div class="callout">
+        <b>Contoh Soal:</b>
+        <div class="callout-sub"><b>1) Positif - Positif:</b> ${f(5,9)} - ${f(2,9)} = ${f('5-2',9)} = <b>${f(3,9)} = ${f(1,3)}</b></div>
+        <div class="callout-sub"><b>2) Salah Satu Negatif:</b> ${f(3,7)} - (${f(-2,7)}) = ${f('3+2',7)} = <b>${f(5,7)}</b></div>
+        <div class="callout-sub"><b>3) Negatif - Negatif:</b> ${f(-4,8)} - (${f(-1,8)}) = ${f('-4+1',8)} = <b>${f(-3,8)}</b></div>
+      </div>
+    </div>
+    <div>
+      <h4 style="margin:6px 0; color:var(--blue);">b) Beda Penyebut</h4>
+      <p>Samakan penyebutnya menggunakan KPK terlebih dahulu sebelum mengurangkan pembilang.</p>
+      <div class="callout">
+        <b>Contoh Soal:</b>
+        <div class="callout-sub"><b>1) Positif - Positif:</b> ${f(3,4)} - ${f(1,2)} = ${f(3,4)} - ${f(2,4)} = <b>${f(1,4)}</b></div>
+        <div class="callout-sub"><b>2) Salah Satu Negatif:</b> ${f(-2,3)} - ${f(1,4)} = ${f(-8,12)} - ${f(3,12)} = <b>${f(-11,12)}</b></div>
+        <div class="callout-sub"><b>3) Negatif - Negatif:</b> ${f(-1,2)} - (${f(-3,5)}) = ${f(-5,10)} - (${f(-6,10)}) = <b>${f(1,10)}</b></div>
+      </div>
+    </div>
+  ` },
+  { 
+    id:6, 
+    title:"6. Operasi Hitung Perkalian Bilangan Pecahan", 
+    body:`<p>Kalikan pembilang dengan pembilang, serta penyebut dengan penyebut. Perhatikan tanda tanda (+ × + = +), (+ × - = -), (- × - = +).</p>
+    <div class="callout">
+      <b>Contoh Soal:</b>
+      <div class="callout-sub"><b>1) Dua Bilangan Positif:</b> ${f(2,3)} × ${f(3,5)} = ${f('2×3','3×5')} = ${f(6,15)} = <b>${f(2,5)}</b></div>
+      <div class="callout-sub"><b>2) Salah Satu Negatif:</b> ${f(-3,4)} × ${f(2,5)} = ${f('-3×2','4×5')} = ${f(-6,20)} = <b>${f(-3,10)}</b></div>
+      <div class="callout-sub"><b>3) Keduanya Negatif:</b> ${f(-1,2)} × (${f(-4,5)}) = ${f('-1×(-4)','2×5')} = ${f(4,10)} = <b>${f(2,5)}</b></div>
+    </div>` 
+  },
+  { 
+    id:7, 
+    title:"7. Operasi Hitung Pembagian Bilangan Pecahan", 
+    body:`<p>Perkalian pecahan pertama dengan kebalikan pecahan kedua (tukar pembilang dan penyebut pecahan kedua).</p>
+    <div class="callout">
+      <b>Contoh Soal:</b>
+      <div class="callout-sub"><b>1) Dua Bilangan Positif:</b> ${f(3,4)} ÷ ${f(2,3)} = ${f(3,4)} × ${f(3,2)} = <b>${f(9,8)} = ${mf(1,1,8)}</b></div>
+      <div class="callout-sub"><b>2) Salah Satu Negatif:</b> ${f(-5,6)} ÷ ${f(2,3)} = ${f(-5,6)} × ${f(3,2)} = ${f(-15,12)} = <b>${f(-5,4)} = ${mf(-1,1,4)}</b></div>
+      <div class="callout-sub"><b>3) Keduanya Negatif:</b> ${f(-2,3)} ÷ (${f(-4,9)}) = ${f(-2,3)} × (${f(-9,4)}) = ${f(18,12)} = <b>${f(3,2)} = ${mf(1,1,2)}</b></div>
+    </div>` 
+  },
+  { 
+    id:8, 
+    title:"8. Mengubah Pecahan Biasa Menjadi Pecahan Campuran", 
+    body:`<p>Dapat dilakukan jika pembilang lebih besar dari penyebut. Untuk pecahan negatif, tanda negatif tetap dituliskan pada bilangan bulat hasil bagi.</p>
+    <div class="callout">
+      <b>Contoh Soal:</b>
+      <div class="callout-sub"><b>1) Dua Bilangan Positif:</b> ${f(7,3)} = 7 ÷ 3 = 2 sisa 1 → <b>${mf(2,1,3)}</b></div>
+      <div class="callout-sub"><b>2) Salah Satu Negatif:</b> ${f(-11,4)} = -(11 ÷ 4) = -2 sisa 3 → <b>${mf(-2,3,4)}</b></div>
+      <div class="callout-sub"><b>3) Pembilang & Penyebut Negatif:</b> ${f('-13','-5')} = 13 ÷ 5 = 2 sisa 3 → <b>${mf(2,3,5)}</b></div>
+    </div>` 
+  },
+  { 
+    id:9, 
+    title:"9. Mengubah Pecahan Campuran Menjadi Pecahan Biasa", 
+    body:`<p>Kalikan bilangan bulat dengan penyebut, lalu tambahkan pembilangnya.</p>
+    <div class="callout">
+      <b>Contoh Soal:</b>
+      <div class="callout-sub"><b>1) Dua Bilangan Positif:</b> ${mf(2,3,4)} = ${f('(2×4)+3',4)} = <b>${f(11,4)}</b></div>
+      <div class="callout-sub"><b>2) Salah Satu Negatif:</b> ${mf(-3,1,2)} = -${f('(3×2)+1',2)} = <b>${f(-7,2)}</b></div>
+      <div class="callout-sub"><b>3) Negatif Komplex:</b> ${mf(-1,4,5)} = -${f('(1×5)+4',5)} = <b>${f(-9,5)}</b></div>
+    </div>` 
+  },
+  { 
+    id:10, 
+    title:"10. Mengubah Pecahan Biasa Menjadi Pecahan Desimal dan Persen", 
+    body:`<p>Bagi pembilang dengan penyebut untuk desimal, atau kalikan 100% untuk persen.</p>
+    <div class="callout">
+      <b>Contoh Soal:</b>
+      <div class="callout-sub"><b>1) Dua Bilangan Positif:</b> ${f(3,5)} = 3 ÷ 5 = <b>0.6</b> | ${f(3,5)} × 100% = <b>60%</b></div>
+      <div class="callout-sub"><b>2) Salah Satu Negatif:</b> ${f(-1,4)} = -1 ÷ 4 = <b>-0.25</b> | ${f(-1,4)} × 100% = <b>-25%</b></div>
+      <div class="callout-sub"><b>3) Negatif Lainnya:</b> ${f(-3,8)} = -3 ÷ 8 = <b>-0.375</b> | ${f(-3,8)} × 100% = <b>-37.5%</b></div>
+    </div>` 
+  },
+  { 
+    id:11, 
+    title:"11. Mengubah Pecahan Desimal dan Persen Menjadi Pecahan Biasa", 
+    body:`<p>Ubah desimal atau persen menjadi pecahan per 10, 100, 1000 dst., lalu sederhanakan FPB-nya.</p>
+    <div class="callout">
+      <b>Contoh Soal:</b>
+      <div class="callout-sub"><b>1) Dua Bilangan Positif:</b> 0.75 = ${f(75,100)} = <b>${f(3,4)}</b> | 40% = ${f(40,100)} = <b>${f(2,5)}</b></div>
+      <div class="callout-sub"><b>2) Salah Satu Negatif:</b> -0.6 = -${f(6,10)} = <b>${f(-3,5)}</b> | -15% = -${f(15,100)} = <b>${f(-3,20)}</b></div>
+      <div class="callout-sub"><b>3) Negatif Desimal:</b> -0.125 = -${f(125,1000)} = <b>${f(-1,8)}</b></div>
+    </div>` 
+  },
+  { 
+    id:12, 
+    title:"12. Membandingkan dan Mengurutkan Susunan Beberapa Pecahan, Desimal, atau Persen", 
+    body:`<p>Konversikan semua jenis bentuk bilangan menjadi desimal, lalu urutkan dari terkecil ke terbesar.</p>
+    <div class="callout">
+      <b>Contoh Soal:</b>
+      <div class="callout-sub"><b>1) Dua Bilangan Positif:</b> Bandingkan 0.5; 40%; ${f(3,4)} → Desimal: 0.50; 0.40; 0.75.<br>Urutan: <b>40% < 0.5 < ${f(3,4)}</b>.</div>
+      <div class="callout-sub"><b>2) Salah Satu Negatif:</b> Urutkan -0.4; ${f(1,2)}; -75% naik.<br>Desimal: -0.40; 0.50; -0.75. Urutan: <b>-75% < -0.4 < ${f(1,2)}</b>.</div>
+      <div class="callout-sub"><b>3) Keduanya Negatif:</b> Urutkan ${f(-2,5)}; -0.8; -25% naik.<br>Desimal: -0.40; -0.80; -0.25. Urutan: <b>-0.8 < ${f(-2,5)} < -25%</b>.</div>
+    </div>` 
+  }
+];
+
+function renderLessons() {
+  let html = `<div class="eyebrow">Materi Pembelajaran</div><h2>Modul Utama Pembelajaran Pecahan</h2><p class="lead">Pilih materi di bawah untuk mempelajari konsep dasar hingga contoh pecahan positif & negatif.</p>`;
+  lessonsData.forEach(l => {
+    html += `<div class="card" style="margin-bottom:12px;">
+      <h3 style="color:var(--blue);">${l.title}</h3>
+      ${l.body}
+    </div>`;
+  });
+  return html;
+}
+
+const quizQuestions = [
+  { q: `Bentuk sederhana dari pecahan ${f(18,24)} adalah...`, o: [f(2,3), f(3,4), f(4,5), f(3,5)], a: 1, e: `Pembagi bersama terbesar (FPB) dari 18 dan 24 adalah 6. ${f('18÷6','24÷6')} = ${f(3,4)}.` },
+  { q: `Pecahan yang nilainya terletak di antara ${f(1,3)} dan ${f(1,2)} adalah...`, o: [f(1,4), f(5,12), f(7,12), f(2,3)], a: 1, e: `Samakan penyebut menjadi 12: ${f(1,3)} = ${f(4,12)} dan ${f(1,2)} = ${f(6,12)}. Nilai di antaranya adalah ${f(5,12)}.` },
+  { q: `Hasil dari ${f(3,5)} + ${f(2,3)} adalah...`, o: [f(5,8), mf(1,1,15), mf(1,2,15), mf(1,4,15)], a: 3, e: `${f(3,5)} + ${f(2,3)} = ${f(9,15)} + ${f(10,15)} = ${f(19,15)} = ${mf(1,4,15)}.` },
+  { q: `Hasil pengurangan ${f(5,6)} - ${f(3,8)} adalah...`, o: [f(11,24), f(2,2), f(1,4), f(7,24)], a: 0, e: `KPK dari 6 dan 8 adalah 24. ${f(20,24)} - ${f(9,24)} = ${f(11,24)}.` },
+  { q: `Hasil dari ${mf(2,1,3)} × ${mf(1,1,2)} adalah...`, o: [mf(3,1,6), mf(3,1,2), mf(2,1,6), mf(3,2,3)], a: 1, e: `Ubah ke pecahan biasa: (${f(7,3)}) × (${f(3,2)}) = ${f(21,6)} = ${f(7,2)} = ${mf(3,1,2)}.` },
+  { q: `Hasil dari ${f(3,4)} ÷ ${f(5,8)} adalah...`, o: [f(15,32), mf(1,1,2), mf(1,1,5), mf(2,1,5)], a: 2, e: `${f(3,4)} × ${f(8,5)} = ${f(24,20)} = ${f(6,5)} = ${mf(1,1,5)}.` },
+  { q: `Bentuk pecahan biasa dari ${mf(3,4,5)} adalah...`, o: [f(12,5), f(17,5), f(19,5), f(23,5)], a: 2, e: `(3 × 5) + 4 = 19, maka menjadi ${f(19,5)}.` },
+  { q: `Bentuk pecahan campuran dari ${f(29,6)} adalah...`, o: [mf(4,5,6), mf(4,1,6), mf(5,1,6), mf(4,3,6)], a: 0, e: `29 ÷ 6 = 4 sisa 5 → ${mf(4,5,6)}.` },
+  { q: `Bentuk desimal dari ${f(7,8)} adalah...`, o: ["0.75", "0.825", "0.875", "0.85"], a: 2, e: "7 ÷ 8 = 0.875." },
+  { q: `Bentuk persen dari ${f(3,20)} adalah...`, o: ["15%", "30%", "20%", "12%"], a: 0, e: `${f(3,20)} × 100% = 15%.` },
+  { q: "Bentuk pecahan biasa paling sederhana dari 0.65 adalah...", o: [f(65,100), f(13,20), f(13,25), f(26,50)], a: 1, e: `0.65 = ${f(65,100)}. Dibagi 5 pada pembilang dan penyebut menjadi ${f(13,20)}.` },
+  { q: `Urutan pecahan 0.6; 55%; ${f(2,3)} dari yang terkecil ke terbesar adalah...`, o: [`55%; 0.6; ${f(2,3)}`, `0.6; 55%; ${f(2,3)}`, `${f(2,3)}; 0.6; 55%`, `55%; ${f(2,3)}; 0.6`], a: 0, e: `Konversi ke desimal: 55% = 0.55; 0.6 = 0.60; ${f(2,3)} ≈ 0.67. Urutan: 55%; 0.6; ${f(2,3)}.` },
+  { q: `Ibu membeli 2,5 kg gula. Digunakan untuk membuat kue sebesar ${mf(1,1,4)} kg. Sisa gula ibu adalah...`, o: ["1.5 kg", "1.2 kg", "1.75 kg", "1.25 kg"], a: 3, e: "2.5 - 1.25 = 1.25 kg." },
+  { q: `Hasil dari (0.4 × ${f(1,4)}) + ${f(1,2)} adalah...`, o: ["0.55", "0.6", "0.75", "0.65"], a: 1, e: "(0.4 × 0.25) + 0.5 = 0.10 + 0.5 = 0.6." },
+  { q: `Pak Budi membagikan 12 kg beras kepada fakir miskin. Jika setiap orang mendapat ${f(3,4)} kg, banyak orang yang menerima beras adalah...`, o: ["9 orang", "12 orang", "16 orang", "18 orang"], a: 2, e: `12 ÷ ${f(3,4)} = 12 × ${f(4,3)} = ${f(48,3)} = 16 orang.` }
+];
+
+let quizStarted = false;
+let quizAnswers = {};
+let quizTimer = null;
+let quizTimeLeft = 12 * 60;
+let quizSubmitted = false;
+
+function startQuiz() {
+  quizStarted = true;
+  quizSubmitted = false;
+  quizAnswers = {};
+  quizTimeLeft = 12 * 60;
+  content.innerHTML = renderQuiz();
+  startQuizTimer();
+}
+
+function renderQuiz() {
+  if(!quizStarted) {
+    return `
+      <div class="eyebrow">Evaluasi Mandiri</div>
+      <h2>Kuis Interaktif Pecahan Cermat</h2>
+      <div class="callout">
+        <b>📋 Petunjuk Pengerjaan Kuis:</b><br>
+        <ol style="margin: 8px 0 0; padding-left: 20px; line-height: 1.6;">
+          <li>Kuis terdiri dari <b>15 soal pilihan ganda</b> mengenai materi bilangan pecahan.</li>
+          <li>Waktu pengerjaan kuis adalah <b>12 menit (720 detik)</b>.</li>
+          <li>Waktu akan berjalan secara otomatis setelah Anda menekan tombol <b>Mulai Kuis Sekarang</b>.</li>
+          <li>Pilihlah salah satu jawaban yang Anda anggap paling tepat untuk setiap soal.</li>
+          <li>Setelah menjawab seluruh soal, tekan tombol <b>Selesai & Submit Kuis</b> untuk melihat skor total dan pembahasan lengkap.</li>
+        </ol>
+      </div>
+      <button class="primary" style="font-size:16px; padding:12px 24px;" onclick="startQuiz()">🚀 Mulai Kuis Sekarang</button>
+    `;
+  }
+
+  if(quizSubmitted) {
+    return renderQuizResults();
+  }
+
+  let minutes = Math.floor(quizTimeLeft / 60);
+  let seconds = quizTimeLeft % 60;
+  let timeStr = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+  let html = `
+    <div class="eyebrow">Evaluasi Mandiri</div>
+    <h2>Kuis Interaktif Pecahan</h2>
+    <div class="timer-box">⏱️ Sisa Waktu: <span id="quizTimerDisplay">${timeStr}</span></div>
+    <p class="lead">Jawab 15 soal di bawah ini. Skor total maksimal 100. Kunci jawaban & pembahasan akan ditampilkan setelah kuis selesai disubmit.</p>
+  `;
+
+  quizQuestions.forEach((q, i) => {
+    html += `<div class="card" style="margin-bottom:14px;">
+      <b>${i+1}. ${q.q}</b>`;
+    q.o.forEach((opt, j) => {
+      let selected = quizAnswers[i] === j ? 'selected' : '';
+      html += `<button class="option ${selected}" onclick="selectQuizAns(${i}, ${j})">${String.fromCharCode(65+j)}. &nbsp; ${opt}</button>`;
+    });
+    html += `</div>`;
+  });
+
+  html += `<button class="primary" style="font-size:16px; padding:12px 24px;" onclick="submitQuiz()">Selesai & Submit Kuis</button>`;
+  return html;
+}
+
+function startQuizTimer() {
+  if (quizTimer) clearInterval(quizTimer);
+  quizTimer = setInterval(() => {
+    if (quizTimeLeft > 0) {
+      quizTimeLeft--;
+      let timerEl = document.getElementById('quizTimerDisplay');
+      if (timerEl) {
+        let m = Math.floor(quizTimeLeft / 60);
+        let s = quizTimeLeft % 60;
+        timerEl.textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+      }
+    } else {
+      clearInterval(quizTimer);
+      alert('Waktu Kuis Habis!');
+      submitQuiz();
+    }
+  }, 1000);
+}
+
+function selectQuizAns(qIdx, optIdx) {
+  if (quizSubmitted) return;
+  quizAnswers[qIdx] = optIdx;
+  content.innerHTML = renderQuiz();
+}
+
+function submitQuiz() {
+  clearInterval(quizTimer);
+  quizSubmitted = true;
+  content.innerHTML = renderQuizResults();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function renderQuizResults() {
+  let correctCount = 0;
+  quizQuestions.forEach((q, i) => {
+    if (quizAnswers[i] === q.a) correctCount++;
+  });
+  let score = Math.round((correctCount / quizQuestions.length) * 100);
+
+  let html = `
+    <div class="eyebrow">Hasil Kuis</div>
+    <h2>Hasil & Pembahasan Kuis</h2>
+    <div class="feedback ${score >= 70 ? 'good' : 'bad'}">
+      <h3 style="margin:0;">Skor Akhir Anda: ${score} / 100</h3>
+      <p style="margin:4px 0 0;">Anda menjawab benar ${correctCount} dari ${quizQuestions.length} soal.</p>
+    </div>
+    <h3 style="margin-top:20px;">Kunci Jawaban dan Langkah Penyelesaian:</h3>
+  `;
+
+  quizQuestions.forEach((q, i) => {
+    let isCorrect = quizAnswers[i] === q.a;
+    let userAnsText = quizAnswers[i] !== undefined ? `${String.fromCharCode(65+quizAnswers[i])}. ${q.o[quizAnswers[i]]}` : 'Tidak Dijawab';
+    
+    html += `<div class="card" style="margin-bottom:14px; border-left: 4px solid ${isCorrect ? 'var(--green)' : 'var(--red)'};">
+      <b>${i+1}. ${q.q}</b>
+      <p style="margin:6px 0; font-size:13px;">Jawaban Anda: <span style="color:${isCorrect ? 'var(--green)' : 'var(--red)'}; font-weight:700;">${userAnsText}</span></p>
+      <p style="margin:6px 0; font-size:13px; color:var(--green); font-weight:700;">Jawaban Benar: ${String.fromCharCode(65+q.a)}. ${q.o[q.a]}</p>
+      <div class="solution-box">
+        <strong>Langkah Penyelesaian:</strong><br>${q.e}
+      </div>
+    </div>`;
+  });
+
+  html += `<button class="primary" onclick="resetQuiz()">Ulangi Kuis</button>`;
+  return html;
+}
+
+function resetQuiz() {
+  quizStarted = false;
+  quizSubmitted = false;
+  quizAnswers = {};
+  quizTimeLeft = 12 * 60;
+  if (quizTimer) clearInterval(quizTimer);
+  content.innerHTML = renderQuiz();
+}
+
+const gameQuestions = [
+  { type: 'text', q: `Hitung nilai dari: (${f(3,4)} - ${f(1,2)}) ÷ (${f(1,3)} + ${f(1,6)}) = ...`, options: [f(1,4), f(3,4), f(1,2), "1"], answer: 2, exp: `(${f(1,4)}) ÷ (${f(1,2)}) = ${f(1,2)}` },
+  { type: 'text', q: `Jika ${f(2,5)} dari x adalah 24, berapa nilai ${f(3,4)} dari x?`, options: ["45", "60", "30", "50"], answer: 0, exp: `x = 60, ${f(3,4)} × 60 = 45` },
+  { type: 'text', q: `Sederhanakan: 0.85 - ${f(2,5)} + 15% = ...`, options: ["0.55", "0.7", "0.65", "0.6"], answer: 3, exp: "0.85 - 0.40 + 0.15 = 0.60" },
+  { type: 'text', q: `Hasil dari (${mf(1,1,2)} × ${mf(1,1,2)}) × ${f(4,9)} adalah...`, options: [f(1,2), "1", "2", f(3,2)], answer: 1, exp: `${f(9,4)} × ${f(4,9)} = 1` },
+  { type: 'text', q: `Urutkan dari yang terkecil ke terbesar: ${f(7,8)}, 0.8, 82%.`, options: [`82%, 0.8, ${f(7,8)}`, `0.8, 82%, ${f(7,8)}`, `${f(7,8)}, 82%, 0.8`, `0.8, ${f(7,8)}, 82%`], answer: 1, exp: "0.8 < 0.82 < 0.875" },
+  { type: 'visual', num: 3, den: 8, q: "Berapa nilai pecahan daerah yang diarsir pada lingkaran ini?", options: [f(5,8), f(3,6), f(3,8), f(1,4)], answer: 2 },
+  { type: 'visual', num: 5, den: 6, q: "Berapa nilai pecahan daerah yang diarsir pada lingkaran ini?", options: [f(5,6), f(1,6), f(4,6), f(5,12)], answer: 0 },
+  { type: 'visual', num: 2, den: 5, q: "Berapa nilai pecahan daerah yang diarsir pada lingkaran ini?", options: [f(3,5), f(2,5), f(1,5), f(4,5)], answer: 1 },
+  { type: 'visual', num: 7, den: 10, q: "Berapa nilai pecahan daerah yang diarsir pada lingkaran ini?", options: [f(3,10), f(7,8), f(6,10), f(7,10)], answer: 3 },
+  { type: 'visual', num: 4, den: 9, q: "Berapa nilai pecahan daerah yang diarsir pada lingkaran ini?", options: [f(4,9), f(5,9), f(1,3), f(4,8)], answer: 0 }
+];
+
+let gameActive = false;
+let gameTimeLeft = 300;
+let gameTimer = null;
+let currentGameIdx = 0;
+let gameScore = 0;
+
+function renderGame() {
+  if (!gameActive && currentGameIdx === 0 && gameTimeLeft === 300) {
+    return `
+      <div class="eyebrow">Tantangan Cepat</div>
+      <h2>Games Pecahan Cermat (5 Menit)</h2>
+      <div class="callout">
+        <b>Aturan Game:</b><br>
+        - Waktu keseluruhan: <b>5 Menit (300 Detik)</b>.<br>
+        - Total soal: <b>10 Soal Tingkat Sulit</b> (5 Soal Matematika Angka & 5 Soal Visual Gambar).<br>
+        - Jawab secepat dan setepat mungkin!
+      </div>
+      <button class="primary" onclick="startGame()">Mulai Game Sekarang!</button>
+    `;
+  }
+
+  if (!gameActive || currentGameIdx >= gameQuestions.length) {
+    return renderGameResults();
+  }
+
+  let q = gameQuestions[currentGameIdx];
+  let minutes = Math.floor(gameTimeLeft / 60);
+  let seconds = gameTimeLeft % 60;
+  let timeStr = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+  let html = `
+    <div class="eyebrow">Games Pecahan</div>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <div class="timer-box">⏱️ Waktu Game: <span id="gameTimerDisplay">${timeStr}</span></div>
+      <div>Soal: <b>${currentGameIdx + 1} / 10</b></div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <p style="font-weight:700; font-size:16px;">${q.q}</p>
+  `;
+
+  if (q.type === 'visual') {
+    html += `<canvas id="gameCanvas" width="160" height="160" class="game-canvas"></canvas>`;
+  }
+
+  html += `<div style="text-align:left; margin-top:10px;">`;
+  q.options.forEach((opt, idx) => {
+    html += `<button class="option" onclick="answerGame(${idx})">${String.fromCharCode(65+idx)}. &nbsp; ${opt}</button>`;
+  });
+  html += `</div></div>`;
+
+  setTimeout(() => {
+    if (q.type === 'visual') drawCircleFraction(q.num, q.den);
+  }, 50);
+
+  return html;
+}
+
+function drawCircleFraction(num, den) {
+  let canvas = document.getElementById('gameCanvas');
+  if (!canvas) return;
+  let ctx = canvas.getContext('2d');
+  let cx = 80, cy = 80, r = 70;
+  ctx.clearRect(0, 0, 160, 160);
+
+  let sliceAngle = (2 * Math.PI) / den;
+  for (let i = 0; i < den; i++) {
+    let start = i * sliceAngle - Math.PI / 2;
+    let end = start + sliceAngle;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, start, end);
+    ctx.closePath();
+
+    if (i < num) {
+      ctx.fillStyle = '#2563eb';
+      ctx.fill();
+    } else {
+      ctx.fillStyle = '#e2e8f0';
+      ctx.fill();
+    }
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+}
+
+function startGame() {
+  gameActive = true;
+  gameTimeLeft = 300;
+  currentGameIdx = 0;
+  gameScore = 0;
+  content.innerHTML = renderGame();
+
+  if (gameTimer) clearInterval(gameTimer);
+  gameTimer = setInterval(() => {
+    if (gameTimeLeft > 0) {
+      gameTimeLeft--;
+      let tEl = document.getElementById('gameTimerDisplay');
+      if (tEl) {
+        let m = Math.floor(gameTimeLeft / 60);
+        let s = gameTimeLeft % 60;
+        tEl.textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+      }
+    } else {
+      clearInterval(gameTimer);
+      gameActive = false;
+      content.innerHTML = renderGameResults();
+    }
+  }, 1000);
+}
+
+function answerGame(optIdx) {
+  if (!gameActive) return;
+  if (optIdx === gameQuestions[currentGameIdx].answer) {
+    gameScore += 10;
+  }
+  currentGameIdx++;
+  if (currentGameIdx >= gameQuestions.length) {
+    clearInterval(gameTimer);
+    gameActive = false;
+    content.innerHTML = renderGameResults();
+  } else {
+    content.innerHTML = renderGame();
+  }
+}
+
+function renderGameResults() {
+  return `
+    <div class="eyebrow">Selesai</div>
+    <h2>Hasil Akhir Game Pecahan</h2>
+    <div class="card" style="text-align:center; padding:30px;">
+      <h3 style="font-size:24px;">Skor Game Anda: <span style="color:var(--blue);">${gameScore} / 100</span></h3>
+      <p>Soal berhasil diselesaikan: ${currentGameIdx} dari 10 soal.</p>
+      <button class="primary" onclick="startGame()">Main Lagi 🔄</button>
+    </div>
+  `;
+}
+
+const tutorHTML = `
+  <div class="eyebrow">Asisten Pintar</div>
+  <h2>Asisten Belajar Pecahan Interaktif (AI)</h2>
+  
+  <div class="callout" style="border-left-color:var(--amber);">
+    <b>ℹ️ Petunjuk Penggunaan Asisten AI:</b><br>
+    Program ini dapat menghitung bilangan <b>pecahan positif maupun negatif</b>. Gunakan format simbol berikut saat menginputkan soal:
+    <ul style="margin: 6px 0 0; padding-left: 20px;">
+      <li><b>Penjumlahan:</b> Gunakan simbol <code>+</code> (Contoh: <code>2/3 + 1/4</code> atau <code>-1/2 + 3/4</code>)</li>
+      <li><b>Pengurangan:</b> Gunakan simbol <code>-</code> (Contoh: <code>3/4 - 1/2</code> atau <code>-2/3 - -1/4</code>)</li>
+      <li><b>Perkalian:</b> Gunakan simbol <code>*</code> atau <code>x</code> (Contoh: <code>2/3 * 3/5</code> atau <code>-1/2 x -4/5</code>)</li>
+      <li><b>Pembagian:</b> Gunakan simbol <code>/</code> atau <code>:</code> (Contoh: <code>3/4 : 2/3</code> atau <code>-5/6 / 2/3</code>)</li>
+    </ul>
+  </div>
+  
+  <label for="userQuery">Masukkan Soal Pecahan (Positif atau Negatif):</label>
+  <input type="text" id="userQuery" placeholder="Contoh: -1/3 + 2/5  atau  3/4 : -2/3">
+  <button class="primary" style="margin-top:10px;" onclick="processTutor()">Hitung & Jelaskan Langkahnya</button>
+
+  <div class="chatbox" id="tutorOutput">Hasil dan langkah penyelesaian akan ditampilkan di sini...</div>
+`;
+
+function processTutor() {
+  let q = document.getElementById('userQuery').value.trim();
+  let out = document.getElementById('tutorOutput');
+  if(!q) {
+    out.textContent = "Silakan masukkan soal terlebih dahulu.";
+    return;
+  }
+
+  // Normalisasi simbol perkalian (x -> *) dan pembagian (: -> /)
+  let normalizedQ = q.replace(/x/gi, '*').replace(/:/g, '/');
+
+  // Regex matcher untuk pecahan positif/negatif dan operator (+, -, *, /)
+  let match = normalizedQ.match(/(-?\d+\/-?\d+)\s*([\+\-\*\/])\s*(-?\d+\/-?\d+)/);
+  if(match) {
+    let f1 = match[1], op = match[2], f2 = match[3];
+    let [p1, q1] = f1.split('/').map(Number);
+    let [p2, q2] = f2.split('/').map(Number);
+
+    if (q1 === 0 || q2 === 0) {
+      out.textContent = "Error: Penyebut pecahan tidak boleh nol (0).";
+      return;
+    }
+
+    let resN, resD, steps = "";
+    let displayOp = op === '*' ? '×' : op === '/' ? '÷' : op;
+
+    if(op === '+') {
+      resN = (p1 * q2) + (p2 * q1);
+      resD = q1 * q2;
+      steps = `1. Samakan penyebut: ${f('('+p1+'×'+q2+')','('+q1+'×'+q2+')')} + ${f('('+p2+'×'+q1+')','('+q2+'×'+q1+')')} = ${f(p1*q2,resD)} + ${f(p2*q1,resD)}<br>
+               2. Jumlahkan pembilang: (${p1*q2}) + (${p2*q1}) = ${resN}<br>
+               3. Hasil dasar: ${f(resN,resD)}`;
+    } else if(op === '-') {
+      resN = (p1 * q2) - (p2 * q1);
+      resD = q1 * q2;
+      steps = `1. Samakan penyebut: ${f('('+p1+'×'+q2+')','('+q1+'×'+q2+')')} - ${f('('+p2+'×'+q1+')','('+q2+'×'+q1+')')} = ${f(p1*q2,resD)} - ${f(p2*q1,resD)}<br>
+               2. Kurangkan pembilang: (${p1*q2}) - (${p2*q1}) = ${resN}<br>
+               3. Hasil dasar: ${f(resN,resD)}`;
+    } else if(op === '*') {
+      resN = p1 * p2;
+      resD = q1 * q2;
+      steps = `1. Kalikan pembilang dengan pembilang: (${p1}) × (${p2}) = ${resN}<br>
+               2. Kalikan penyebut dengan penyebut: (${q1}) × (${q2}) = ${resD}<br>
+               3. Hasil dasar: ${f(resN,resD)}`;
+    } else if(op === '/') {
+      resN = p1 * q2;
+      resD = q1 * p2;
+      steps = `1. Balik pecahan kedua dan lakukan perkalian: ${f(p1,q1)} × ${f(q2,p2)}<br>
+               2. Kalikan pembilang & penyebut: ${f('('+p1+'×'+q2+')', '('+q1+'×'+p2+')')} = ${f(resN,resD)}`;
+    }
+
+    // Penyederhanaan Pecahan
+    let commonGcd = gcd(resN, resD);
+    let simpN = resN / commonGcd;
+    let simpD = resD / commonGcd;
+
+    if (simpD < 0) {
+      simpN = -simpN;
+      simpD = -simpD;
+    }
+
+    let simpText = "";
+    if (commonGcd > 1 || resN < 0 || resD < 0) {
+      simpText = `<br>4. Bentuk Sederhana: <b>${f(simpN, simpD)}</b>`;
+    }
+
+    out.innerHTML = `<b>Penyelesaian untuk ${f(p1,q1)} ${displayOp} ${f(p2,q2)}:</b><br><br>${steps}${simpText}`;
+  } else {
+    out.textContent = "Format tidak dikenali. Pastikan memasukkan soal pecahan seperti: -1/3 + 2/5, 3/4 - -1/2, -2/3 x 3/4, atau -5/6 : 2/3.";
+  }
+}
+
+function go(page) {
+  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('active', b.dataset.page === page));
+  if (quizTimer) clearInterval(quizTimer);
+  if (gameTimer) clearInterval(gameTimer);
+
+  if (page === 'home') {
+    content.innerHTML = homeHTML;
+  } else if (page === 'lessons') {
+    content.innerHTML = renderLessons();
+  } else if (page === 'quiz') {
+    content.innerHTML = renderQuiz();
+  } else if (page === 'games') {
+    content.innerHTML = renderGame();
+  } else if (page === 'tutor') {
+    content.innerHTML = tutorHTML;
+  }
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+document.querySelectorAll('nav button').forEach(b => {
+  b.addEventListener('click', () => go(b.dataset.page));
+});
+
+go('home');
+</script>
+</body>
+</html>
